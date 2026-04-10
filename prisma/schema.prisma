@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // provider = "sqlite"
+}
+
+
+// create a simple model
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String  @unique
+  logs  Log[]  
+}
+
+model Log {
+  id        Int       @id @default(autoincrement())
+  level     LogLevel  @default(INFO)
+  action    String    // e.g., "USER_CREATED", "PAYMENT_PROCESSED"
+  message   String
+  userId    Int?      
+  metadata  Json?     
+  ip        String?  
+  userAgent String?   
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user      User?     @relation(fields: [userId], references: [id])
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  CRITICAL
+}
