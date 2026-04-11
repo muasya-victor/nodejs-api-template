@@ -10,7 +10,6 @@ class UserRepository extends BaseRepository<User> {
   }
 
   async create(userData: Prisma.UserCreateInput, req?: any): Promise<User> {
-
     const isUserExisting = await prisma.user.findUnique({
       where: { email: userData.email },
     });
@@ -33,7 +32,6 @@ class UserRepository extends BaseRepository<User> {
     }
 
     const user = await super.create(userData);
-
     return user;
   }
 
@@ -67,10 +65,8 @@ class UserRepository extends BaseRepository<User> {
       throw new AppError("User not found", 404);
     }
 
-    // If email is being changed, check if new email already exists
     if (userData.email && userData.email !== existingUser.email) {
       const emailExists = await this.findByEmail(userData.email as string);
-      
       if (emailExists) {
         throw new AppError("Email already in use by another user", 409);
       }
@@ -78,7 +74,6 @@ class UserRepository extends BaseRepository<User> {
 
     const user = await super.update(id, userData);
 
-    // Log update
     await logService.logEvent({
       level: "INFO",
       action: "USER_UPDATED",
@@ -93,7 +88,6 @@ class UserRepository extends BaseRepository<User> {
   }
 
   async deleteUser(id: number, req?: any): Promise<User> {
-    // Check if user exists
     const existingUser = await this.findById(id);
     if (!existingUser) {
       throw new AppError("User not found", 404);
@@ -101,7 +95,6 @@ class UserRepository extends BaseRepository<User> {
 
     const user = await super.delete(id);
 
-    // Log deletion
     await logService.logEvent({
       level: "WARN",
       action: "USER_DELETED",
@@ -116,7 +109,31 @@ class UserRepository extends BaseRepository<User> {
   }
 
   async getUsersWithPagination(query: any) {
-    return await this.paginate(query);
+    const result = await this.paginate(query);
+    // Remove passwords from response
+    return {
+      ...result,
+      data: result.data.map((user: any) => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      }),
+    };
+  }
+
+  // Get user without password
+  async getUserWithoutPassword(id: number) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    return user;
   }
 }
 

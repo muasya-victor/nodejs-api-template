@@ -1,4 +1,3 @@
-// src/controllers/user.controller.ts
 import { type Request, type Response, type NextFunction } from "express";
 import { userService } from "@/modules/user/user.service.js";
 import { AppError } from "@/utils/errors.js";
@@ -30,7 +29,6 @@ export const getUsers = async (
   next: NextFunction,
 ) => {
   try {
-    // Service handles pagination
     const result = await userService.getUsers(req.query);
 
     res.status(200).json({
@@ -48,11 +46,66 @@ export const getUserById = async (
   next: NextFunction,
 ) => {
   try {
-    const user = await userService.getUserById(parseInt(req.params.id as string));
+    const user = await userService.getUserById(
+      parseInt(req.params.id as string),
+    );
 
     res.status(200).json({
       message: "User retrieved successfully",
       user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get current user's profile
+export const getMyProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await userService.getMyProfile();
+
+    res.status(200).json({
+      message: "Profile retrieved successfully",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update current user's profile
+export const updateMyProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await userService.updateMyProfile(req.body, req);
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete current user's account
+export const deleteMyAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    await userService.deleteMyAccount(req);
+
+    res.status(200).json({
+      message: "Account deleted successfully",
     });
   } catch (error) {
     next(error);

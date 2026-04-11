@@ -1,6 +1,20 @@
+enum Role {
+  USER
+  ADMIN
+  MANAGER
+  STUDENT
+  TEACHER
+  CUSTOMER
+  TEMPORARY
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String  @unique
-  logs  Log[]  
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String    @map("password")  @default("TEMP_PASSWORD")
+  role      Role      @default(USER)  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  logs      Log[]
 }

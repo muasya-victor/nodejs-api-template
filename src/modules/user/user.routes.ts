@@ -1,15 +1,22 @@
-// src/routes/user.routes.ts
 import { Router } from "express";
 import {
   createUserController,
   getUsers,
   getUserById,
-} from "@/modules/user/user.controller.js";
+  getMyProfile,
+  updateMyProfile,
+  deleteMyAccount,
+} from "./user.controller.js";
+import { authMiddleware } from "@/middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", getUsers); 
-router.get("/:id", getUserById); 
 router.post("/", createUserController);
+router.get("/", getUsers);
+
+router.get("/me", authMiddleware, getMyProfile);
+router.put("/me", authMiddleware, updateMyProfile);
+router.delete("/me", authMiddleware, deleteMyAccount);
+router.get("/:id", authMiddleware, getUserById);
 
 export default router;
