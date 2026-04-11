@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts",
+    "docs:generate": "tsx src/swagger/generate.ts",
+    "dev": "npm run docs:generate && tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
@@ -22,6 +23,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "nodemon": "^3.1.14",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.2",
     "uuid": "^13.0.0",
@@ -31,6 +34,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/uuid": "^10.0.0",
     "dotenv": "^17.4.1",
     "prisma": "^7.7.0",

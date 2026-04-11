@@ -12,6 +12,7 @@ import { AppError } from "@/utils/errors.js";
 import { errorLoggingMiddleware } from "@/middlewares/error-logging.middleware.js";
 import { contextMiddleware } from "./middlewares/context.middleware.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
+import { swaggerServe, swaggerSetup } from "./swagger/swagger.ui.js";
 
 dotenv.config();
 
@@ -20,23 +21,21 @@ const app: Application = express();
 /** Register middlewares */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(authMiddleware);
+app.use(
+  "/api/v1/docs",
+  swaggerServe,
+  swaggerSetup,
+); /** I have added this here just to make sure it is before the AUTH and Context middlewares */
+// app.use(authMiddleware);
 app.use(contextMiddleware);
 
 
-/** Generate API path with version */
-const generatePathWithVersion = (
-  path: string,
-  version: string = "v1",
-): string => `/api/${version}/${path}`;
-
 /** Register routes */
-app.use(generatePathWithVersion("auth"), authRoutes);
-app.use(generatePathWithVersion("users"), userRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
-
 
 /** Error handling middleware (always last) */
 app.use(errorLoggingMiddleware);
