@@ -1,6 +1,6 @@
 // src/middlewares/error-logging.middleware.ts
 import { type Request, type Response, type NextFunction } from "express";
-import { logService } from "@/services/log.service.js";
+import { logService } from "@/modules/log/log.service.js";
 
 export const errorLoggingMiddleware = async (
   err: any,
@@ -28,5 +28,5 @@ export const errorLoggingMiddleware = async (
     userAgent: req.get("user-agent") || null,
   });
 
-  next(err); 
+  next(err);
 };

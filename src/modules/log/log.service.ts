@@ -1,5 +1,5 @@
 // src/services/log.service.ts
-import { logRepository } from "@/repositories/log.repository.js";
+import { logRepository } from "@/modules/log/log.repository.js";
 import { type CreateLogDTO, type LogQueryParams } from "@/types/log.types.js";
 
 export const logService = {
@@ -13,7 +13,6 @@ export const logService = {
     return dbLog;
   },
 
-  // Updated to accept an object
   logUserAction: async (params: {
     userId: number | null;
     action: string;
@@ -32,7 +31,6 @@ export const logService = {
     });
   },
 
-  // Updated to accept an object
   logError: async (params: {
     error: Error;
     action: string;

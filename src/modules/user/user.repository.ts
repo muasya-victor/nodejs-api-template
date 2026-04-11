@@ -1,6 +1,6 @@
 // src/repositories/user.repository.ts
 import { prisma } from "@/config/prisma.js";
-import { BaseRepository } from "./base.repository.js";
+import { BaseRepository } from "../core/base.repository.js";
 import { AppError } from "@/utils/errors.js";
 
 class UserRepository extends BaseRepository {

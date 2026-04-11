@@ -1,6 +1,6 @@
 // src/controllers/user.controller.ts
 import { type Request, type Response, type NextFunction } from "express";
-import { userService } from "@/services/user.service.js";
+import { userService } from "@/modules/user/user.service.js";
 import { AppError } from "@/utils/errors.js";
 
 export const createUserController = async (

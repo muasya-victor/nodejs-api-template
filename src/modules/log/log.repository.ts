@@ -1,4 +1,3 @@
-// src/repositories/log.repository.ts
 import { prisma } from "@/config/prisma.js";
 import { type CreateLogDTO, type LogQueryParams } from "@/types/log.types.js";
 import { Prisma } from "@/generated/prisma/client.js";

@@ -1,7 +1,7 @@
 // src/services/user.service.ts
-import { userRepository } from "@/repositories/user.repository.js";
+import { userRepository } from "@/modules/user/user.repository.js";
 import { type CreateUserDTO } from "@/types/user.js";
-import { logService } from "@/services/log.service.js";
+import { logService } from "@/modules/log/log.service.js";
 import { AppError } from "@/utils/errors.js";
 
 export const userService = {
