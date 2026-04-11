@@ -1,7 +1,17 @@
-import app from "@/app.js";
+import http from "http";
+import app from "./app.js";
+import { initializeWebSocket } from "./websocket/index.js";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize WebSocket (this attaches to the server)
+initializeWebSocket(server);
+
+// Start server
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`WebSocket server is ready`);
 });
