@@ -1,13 +1,12 @@
-// src/modules/auth/auth.service.ts
 import bcrypt from "bcryptjs";
-import jwt, { type SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { prisma } from "@/config/prisma.js";
 import { AppError } from "@/utils/errors.js";
 import type { LoginDTO, RegisterDTO, JwtPayload } from "@/types/auth.types.js";
 
 const JWT_SECRET =
-  process.env.JWT_SECRET || "your-super-secret-key-change-this";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
+  process.env.JWT_SECRET || "God-ni-msoo";
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["expiresIn"];
 
 export const authService = {
   register: async (userData: RegisterDTO, req?: any) => {
@@ -87,8 +86,9 @@ export const authService = {
   },
 
   generateToken: (payload: JwtPayload): string => {
-    const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
-    return jwt.sign(payload, JWT_SECRET as string, options);
+    // Ensure JWT_EXPIRES_IN is a valid value
+    const expiresIn = JWT_EXPIRES_IN || "7d";
+    return jwt.sign(payload, JWT_SECRET, { expiresIn } as jwt.SignOptions);
   },
 
   verifyToken: (token: string): JwtPayload => {
