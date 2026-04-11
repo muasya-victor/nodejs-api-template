@@ -20,10 +20,9 @@ const app: Application = express();
 /** Register middlewares */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 app.use(authMiddleware);
 app.use(contextMiddleware);
+
 
 /** Generate API path with version */
 const generatePathWithVersion = (
@@ -37,6 +36,7 @@ app.use(generatePathWithVersion("users"), userRoutes);
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
+
 
 /** Error handling middleware (always last) */
 app.use(errorLoggingMiddleware);
