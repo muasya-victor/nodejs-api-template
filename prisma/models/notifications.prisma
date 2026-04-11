@@ -1,0 +1,115 @@
+// prisma/models/notification.prisma
+enum NotificationCategory {
+  SYSTEM
+  ACCOUNT
+  PAYMENT
+  REMINDER
+  PROMOTION
+  MESSAGE
+  ALERT
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Notification {
+  id             Int                    @id @default(autoincrement())
+  userId         Int
+  senderId       Int?
+  category       NotificationCategory
+  label          String
+  title          String
+  content        String
+  metadata       Json?
+  isRead         Boolean                @default(false)
+  isDelivered    Boolean                @default(false)
+  priority       NotificationPriority   @default(MEDIUM)
+  createdAt      DateTime               @default(now())
+  readAt         DateTime?
+  deliveredAt    DateTime?
+  
+  // Relations
+  user           User                   @relation("userNotifications", fields: [userId], references: [id])
+  sender         User?                  @relation("sentNotifications", fields: [senderId], references: [id])
+  receipts       NotificationReceipt[]
+  offlineQueue   OfflineNotification[]
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@index([isDelivered, createdAt])
+  @@index([senderId])
+}
+
+model NotificationPreference {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  disabledCategories NotificationCategory[] @default([])
+  emailEnabled   Boolean  @default(true)
+  pushEnabled    Boolean  @default(true)
+  inAppEnabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+}
+
+model NotificationReceipt {
+  id             Int        @id @default(autoincrement())
+  notificationId Int
+  userId         Int
+  deliveredAt    DateTime   @default(now())
+  readAt         DateTime?
+  deviceId       String?
+  
+  // Relations
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  
+  @@unique([notificationId, userId])
+  @@index([userId, readAt])
+}
+
+enum PresenceStatus {
+  ONLINE
+  AWAY
+  BUSY
+  OFFLINE
+}
+
+model UserPresence {
+  id             Int            @id @default(autoincrement())
+  userId         Int            @unique
+  status         PresenceStatus @default(OFFLINE)
+  lastSeen       DateTime       @default(now())
+  currentDevice  String?
+  customStatus   String?
+  
+  // Relations
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([status])
+  @@index([lastSeen])
+}
+
+
+model OfflineNotification {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  notificationId Int
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+  
+  // Relations
+  notification   Notification @relation(fields: [notificationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  
+  @@index([userId, expiresAt])
+}
