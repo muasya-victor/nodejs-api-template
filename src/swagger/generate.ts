@@ -42,6 +42,7 @@ const outputFile = path.join(process.cwd(), "openapi.json");
 const endpointsFiles = [
   path.join(process.cwd(), "src/modules/auth/auth.routes.ts"),
   path.join(process.cwd(), "src/modules/user/user.routes.ts"),
+  path.join(process.cwd(), "src/modules/notification/notification.routes.ts"),
 ];
 
 // Generate swagger.json

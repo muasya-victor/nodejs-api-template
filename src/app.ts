@@ -13,6 +13,7 @@ import { errorLoggingMiddleware } from "@/middlewares/error-logging.middleware.j
 import { contextMiddleware } from "./middlewares/context.middleware.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
 import { swaggerServe, swaggerSetup } from "./swagger/swagger.ui.js";
+import notificationRoutes from "@/modules/notification/notification.routes.js";
 
 dotenv.config();
 
@@ -25,14 +26,16 @@ app.use(
   "/api/v1/docs",
   swaggerServe,
   swaggerSetup,
-); /** I have added this here just to make sure it is before the AUTH and Context middlewares */
-// app.use(authMiddleware);
+); 
+app.use("/api/v1/auth", authRoutes);
+
+/** I have added this here just to make sure it is before the AUTH and Context middlewares */
+app.use(authMiddleware);
 app.use(contextMiddleware);
 
-
 /** Register routes */
-app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
