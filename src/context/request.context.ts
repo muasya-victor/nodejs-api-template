@@ -2,7 +2,7 @@ import type { AuthUser } from "@/types/auth.types.js";
 import { AsyncLocalStorage } from "async_hooks";
 
 export interface RequestContext {
-  user: AuthUser | null;
+  user?: AuthUser | null;
   requestId?: string;
   ip?: string;
 }

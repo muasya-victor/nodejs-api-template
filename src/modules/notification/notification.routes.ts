@@ -25,7 +25,6 @@ const router = Router();
  */
 router.post(
   "/",
-  authMiddleware,
   createNotification,
   /*
     #swagger.path = '/api/v1/notifications'
@@ -55,7 +54,6 @@ router.post(
  */
 router.get(
   "/",
-  authMiddleware,
   getMyNotifications,
   /*
     #swagger.path = '/api/v1/notifications'
@@ -95,7 +93,6 @@ router.get(
  */
 router.get(
   "/unread",
-  authMiddleware,
   getUnreadNotifications,
   /*
     #swagger.path = '/api/v1/notifications/unread'
@@ -118,7 +115,6 @@ router.get(
  */
 router.get(
   "/unread/count",
-  authMiddleware,
   getUnreadCount,
   /*
     #swagger.path = '/api/v1/notifications/unread/count'
@@ -135,7 +131,6 @@ router.get(
  */
 router.get(
   "/stats",
-  authMiddleware,
   getNotificationStats,
   /*
     #swagger.path = '/api/v1/notifications/stats'
@@ -152,7 +147,6 @@ router.get(
  */
 router.patch(
   "/:id/read",
-  authMiddleware,
   markAsRead,
   /*
     #swagger.path = '/api/v1/notifications/{id}/read'
@@ -175,7 +169,6 @@ router.patch(
  */
 router.patch(
   "/read/all",
-  authMiddleware,
   markAllAsRead,
   /*
     #swagger.path = '/api/v1/notifications/read/all'
@@ -192,7 +185,6 @@ router.patch(
  */
 router.patch(
   "/:id/archive",
-  authMiddleware,
   archiveNotification,
   /*
     #swagger.path = '/api/v1/notifications/{id}/archive'
@@ -215,7 +207,6 @@ router.patch(
  */
 router.delete(
   "/:id",
-  authMiddleware,
   deleteNotification,
   /*
     #swagger.path = '/api/v1/notifications/{id}'
@@ -238,7 +229,6 @@ router.delete(
  */
 router.get(
   "/preferences",
-  authMiddleware,
   getPreferences,
   /*
     #swagger.path = '/api/v1/notifications/preferences'
@@ -255,7 +245,6 @@ router.get(
  */
 router.put(
   "/preferences",
-  authMiddleware,
   updatePreferences,
   /*
     #swagger.path = '/api/v1/notifications/preferences'

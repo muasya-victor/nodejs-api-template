@@ -8,6 +8,7 @@ import type {
   NotificationQueryParams,
 } from "@/types/notification.types.js";
 import type { Notification } from "@/generated/prisma/client.js";
+import { getCurrentUser } from "@/context/request.context.js";
 
 export const notificationService = {
   async createAndNotify(

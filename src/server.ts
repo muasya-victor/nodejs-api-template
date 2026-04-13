@@ -13,5 +13,6 @@ initializeWebSocket(server);
 // Start server
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
   console.log(`WebSocket server is ready`);
 });

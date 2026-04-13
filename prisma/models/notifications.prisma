@@ -26,6 +26,7 @@ model Notification {
   content        String
   metadata       Json?
   isRead         Boolean                @default(false)
+  isArchived     Boolean                @default(false)
   isDelivered    Boolean                @default(false)
   priority       NotificationPriority   @default(MEDIUM)
   createdAt      DateTime               @default(now())

@@ -26,12 +26,14 @@ app.use(
   "/api/v1/docs",
   swaggerServe,
   swaggerSetup,
-); /** I have added this here just to make sure it is before the AUTH and Context middlewares */
+); 
+app.use("/api/v1/auth", authRoutes);
+
+/** I have added this here just to make sure it is before the AUTH and Context middlewares */
 app.use(authMiddleware);
 app.use(contextMiddleware);
 
 /** Register routes */
-app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.get("/health", (_req: Request, res: Response) => {

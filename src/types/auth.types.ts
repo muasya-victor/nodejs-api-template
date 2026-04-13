@@ -27,4 +27,5 @@ export type AuthUser = {
     | "TEACHER"
     | "CUSTOMER"
     | "TEMPORARY";
+  password?: string;
 };
