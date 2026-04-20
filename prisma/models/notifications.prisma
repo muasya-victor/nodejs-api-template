@@ -17,9 +17,9 @@ enum NotificationPriority {
 }
 
 model Notification {
-  id             Int                    @id @default(autoincrement())
-  userId         Int
-  senderId       Int?
+  id             String                 @id @default(uuid())
+  userId         String
+  senderId       String?
   category       NotificationCategory
   label          String
   title          String
@@ -47,8 +47,8 @@ model Notification {
 }
 
 model NotificationPreference {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
+  id String @id @default(uuid())
+  userId    String      @unique
   disabledCategories NotificationCategory[] @default([])
   emailEnabled   Boolean  @default(true)
   pushEnabled    Boolean  @default(true)
@@ -63,9 +63,9 @@ model NotificationPreference {
 }
 
 model NotificationReceipt {
-  id             Int        @id @default(autoincrement())
-  notificationId Int
-  userId         Int
+  id  String @id @default(uuid())
+  notificationId String
+  userId         String
   deliveredAt    DateTime   @default(now())
   readAt         DateTime?
   deviceId       String?
@@ -86,8 +86,8 @@ enum PresenceStatus {
 }
 
 model UserPresence {
-  id             Int            @id @default(autoincrement())
-  userId         Int            @unique
+  id             String         @id @default(uuid())
+  userId         String            @unique
   status         PresenceStatus @default(OFFLINE)
   lastSeen       DateTime       @default(now())
   currentDevice  String?
@@ -102,9 +102,9 @@ model UserPresence {
 
 
 model OfflineNotification {
-  id             Int      @id @default(autoincrement())
-  userId         Int
-  notificationId Int
+  id             String   @id @default(uuid())
+  userId         String
+  notificationId String
   createdAt      DateTime @default(now())
   expiresAt      DateTime
   

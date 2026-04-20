@@ -6,6 +6,7 @@ import type { LoginDTO, RegisterDTO, JwtPayload } from "@/types/auth.types.js";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "God-ni-msoo";
+  
 const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["expiresIn"];
 
 export const authService = {

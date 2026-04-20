@@ -9,8 +9,18 @@ enum Role {
   TEMPORARY
 }
 
+model UserAuth {
+  user_id       String   @id 
+  password_hash String
+  last_login_at DateTime?
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@index([user_id])
+}
+
+
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid())
   name      String
   email     String    @unique
   password  String    @map("password") @default("TEMP_PASSWORD")
@@ -26,5 +36,6 @@ model User {
   notificationReceipts  NotificationReceipt[]
   presence              UserPresence?
   offlineNotifications  OfflineNotification[]
-  
+  userAuth              UserAuth?
 }
+

@@ -7,11 +7,11 @@ enum LogLevel {
 }
 
 model Log {
-  id        Int       @id @default(autoincrement())
+  id       String    @id @default(uuid())
   level     LogLevel  @default(INFO)
   action    String
   message   String
-  userId    Int?
+  userId    String?
   metadata  Json?
   ip        String?
   userAgent String?
