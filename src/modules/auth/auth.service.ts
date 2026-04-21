@@ -80,7 +80,9 @@ export const authService = {
       role: user.role,
     });
 
-    return { user: user, token };
+    const {userAuth, ...userWithoutAuth} = user;
+
+    return { user: userWithoutAuth, token };
   },
 
   generateToken: (payload: JwtPayload): string => {
