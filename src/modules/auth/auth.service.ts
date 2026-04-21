@@ -52,7 +52,6 @@ export const authService = {
   },
 
   login: async (credentials: LoginDTO, req?: any) => {
-    // Validate required fields
     if (!credentials.email || !credentials.password) {
       throw new AppError("Email and password are required", 400);
     }
