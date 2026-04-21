@@ -11,12 +11,10 @@ const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["
 
 export const authService = {
   register: async (userData: RegisterDTO, req?: any) => {
-    // Validate required fields
     if (!userData.email || !userData.password || !userData.name) {
       throw new AppError("Name, email, and password are required", 400);
     }
 
-    // Check if user exists
     const existingUser = await prisma.user.findUnique({
       where: { email: userData.email },
     });
@@ -25,7 +23,6 @@ export const authService = {
       throw new AppError("User with this email already exists", 409);
     }
 
-    // Hash password (ensure it's a string)
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     // Create user
@@ -33,8 +30,14 @@ export const authService = {
       data: {
         name: userData.name,
         email: userData.email,
-        password: hashedPassword,
         role: "USER",
+      },
+    });
+
+    const userAuth = await prisma.userAuth.create({
+      data: {
+        user_id: user.id,
+        password_hash: hashedPassword,
       },
     });
 
@@ -45,9 +48,7 @@ export const authService = {
       role: user.role,
     });
 
-    // Return user without password
-    const { password, ...userWithoutPassword } = user;
-    return { user: userWithoutPassword, token };
+    return { user: user, token };
   },
 
   login: async (credentials: LoginDTO, req?: any) => {
@@ -56,38 +57,33 @@ export const authService = {
       throw new AppError("Email and password are required", 400);
     }
 
-    // Find user
     const user = await prisma.user.findUnique({
       where: { email: credentials.email },
+      include: { userAuth: true },
     });
 
     if (!user) {
       throw new AppError("Invalid email or password", 401);
     }
 
-    // Check password (ensure both are strings)
     const isValidPassword = await bcrypt.compare(
       credentials.password,
-      user.password,
+      user.userAuth?.password_hash || "",
     );
     if (!isValidPassword) {
       throw new AppError("Invalid email or password", 401);
     }
 
-    // Generate token
     const token = authService.generateToken({
       id: user.id,
       email: user.email,
       role: user.role,
     });
 
-    // Return user without password
-    const { password, ...userWithoutPassword } = user;
-    return { user: userWithoutPassword, token };
+    return { user: user, token };
   },
 
   generateToken: (payload: JwtPayload): string => {
-    // Ensure JWT_EXPIRES_IN is a valid value
     const expiresIn = JWT_EXPIRES_IN || "7d";
     return jwt.sign(payload, JWT_SECRET, { expiresIn } as jwt.SignOptions);
   },
